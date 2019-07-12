@@ -28,5 +28,9 @@
         stop() {
             clearInterval(this.timer_con);
         }
+
+        onLoad () {
+            console.log('component onLoad')
+        }
     }
 </script>

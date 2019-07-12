@@ -1,0 +1,37 @@
+<template>
+    <div>{{title}}</div>
+</template>
+
+<script>
+    import wepy from 'wepy';
+
+    export default class UseProps extends wepy.component {
+        data={}
+        props={
+            //静态传值
+            title: String,
+            //下面两种是动态传值
+            //父组件传来的值   .sync
+            syncTitle: {
+                type: String
+            },
+
+            twoWayTitle: {
+                type: Number,
+                default: 'nothing',
+                twoWay: true    //twoWay为true，此时改变子组件的值，父组件的也会更改
+            }
+        };
+        methods={}
+        onLoad() {
+            console.log('父组件传来的值:::', this.syncTitle);
+
+            //twoWay为true，此时改变子组件的值，父组件的也会更改
+            //改变前
+            console.log('改变前:::', this.$parent.parentTitle)
+            this.twoWayTitle = 'component example';
+            this.$apply();  //必须加上，不然不会刷新
+            console.log('查看父组件的值是否改变:::', this.$parent.parentTitle)  //component example
+        }
+    }
+</script>

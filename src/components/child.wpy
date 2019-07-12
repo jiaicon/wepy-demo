@@ -1,0 +1,28 @@
+<template>
+    <div>
+        <div @tap="tap">{{child}}</div>
+        <slot name="title"></slot>
+    </div>
+</template>
+<script>
+    //用于监听组件之间的通信与交互事件的事件处理函数需要写在组件和页面的events对象中
+    import wepy from 'wepy';
+
+    export default class Child extends wepy.component {
+        data={
+            child: 'click me'
+        }
+        // events对象中所声明的函数为用于监听组件之间的通信与交互事件的事件处理函数
+        events={
+            'some-event': (p1, p2, p3, $event) => {
+                console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`);
+            }
+        }
+
+        methods={
+            tap(){
+                this.$emit('childFn', 'child data')
+            }
+        }
+    }
+</script>

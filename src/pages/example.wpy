@@ -6,6 +6,15 @@
         <view @tap="checkToken">检查token</view>
         <timer></timer>
         <view @tap="stop">stop</view>
+
+        <useProps :title="parentTitle" :syncTitle.sync="parentTitle" :twoWayTitle="parentTitle"></useProps>
+
+        <view>
+            <view>{{child}}</view>
+            <child @childFn.user="changeData">
+                <view slot="title">哈哈</view>
+            </child>
+        </view>
     </view>
 </template>
 
@@ -14,6 +23,8 @@
     import 'wepy-async-function';
     import login from '../mixins/login';
     import Timer from '../components/timer';
+    import UseProps from '../components/props';
+    import Child from '../components/child';
 
     export default class Example extends wepy.page {
         config={
@@ -21,21 +32,28 @@
         };
 
         data={
-            example: 'example'
+            example: 'example',
+            parentTitle: 'example component',
+            child: 'change me'
         };
 
         components={
-            timer: Timer
+            timer: Timer,
+            useProps: UseProps,
+            child: Child
         };
         methods={
             goIndex() {
-                console.log(111)
                 this.$navigate({
                     url: 'index'
                 })
             },
             stop(){
                 this.$invoke('timer', 'stop');
+            },
+            changeData(param, evt) {
+                console.log(param, evt);
+                this.child=param;
             }
         };
         mixins = [login];
@@ -65,6 +83,13 @@
     * this.$emit('eventName', param1, param2, ...)        子组件发起广播，只有其父组件和祖先组件可以接收到，  其兄弟组件、父级的兄弟组件、祖先的兄弟组件都接收不到
     *
     * this.$invoke('componentName', 'methodName', param1, param2, ...)      一个页面或组件直接调用其他组件
+    * **/
+
+
+    /*
+    * 修饰符
+    * .sync 父组件数据绑定至子组件   当在父组件中改变时，会同时改变子组件对应的值
+    * twoWay: true   子组件数据绑定至父组件   twoWay为true时，子组件props中的属性值改变时，会同时改变父组件对应的值
     * **/
 </script>
 
