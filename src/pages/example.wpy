@@ -1,0 +1,76 @@
+<template>
+    <view class="example-box">
+        <view>{{example}}</view>
+        <button @tap="goIndex">点击跳转index</button>
+        <view>{{login}}</view>
+        <view @tap="checkToken">检查token</view>
+        <timer></timer>
+        <view @tap="stop">stop</view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import 'wepy-async-function';
+    import login from '../mixins/login';
+    import Timer from '../components/timer';
+
+    export default class Example extends wepy.page {
+        config={
+            navigationBarTitleText: 'example'
+        };
+
+        data={
+            example: 'example'
+        };
+
+        components={
+            timer: Timer
+        };
+        methods={
+            goIndex() {
+                console.log(111)
+                this.$navigate({
+                    url: 'index'
+                })
+            },
+            stop(){
+                this.$invoke('timer', 'stop');
+            }
+        };
+        mixins = [login];
+        onLoad() {
+            console.log('onLoad');
+            this.example = 'change title';
+        }
+        onLaunch() {
+            console.log('onLaunch')
+        }
+        async timeout() {
+            await setTimeout(()=>{
+                this.example='change title three second';
+                this.$apply();   //不加这句话不会自动刷新页面
+            }, 3000)
+        }
+        onShow() {
+            console.log('onShow');
+            this.$invoke('timer', 'begin');
+            this.timeout()
+        }
+    }
+
+    /*
+    * this.$broadcast('eventName', param1, param2, ...)   父组件发起事件，只有所有子组件都会接收到，
+    *
+    * this.$emit('eventName', param1, param2, ...)        子组件发起广播，只有其父组件和祖先组件可以接收到，  其兄弟组件、父级的兄弟组件、祖先的兄弟组件都接收不到
+    *
+    * this.$invoke('componentName', 'methodName', param1, param2, ...)      一个页面或组件直接调用其他组件
+    * **/
+</script>
+
+<style lang="less">
+    .example-box {
+        text-align: center;
+    }
+</style>
+

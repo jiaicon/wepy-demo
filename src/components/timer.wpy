@@ -1,0 +1,32 @@
+<style>
+
+</style>
+<template>
+    <div>{{timer}}</div>
+</template>
+<script>
+    import wepy from 'wepy';
+    import moment from 'moment';
+    export default class Timer extends wepy.component {
+        props={
+
+        }
+        data={
+            timer: 'Timer~~',
+            timer_con: null
+        }
+        events={}
+        methods={
+
+        }
+        begin() {
+            this.timer_con = setInterval(()=>{
+                this.timer=moment().format('YYYY-MM-DD HH:mm:ss');
+                this.$apply();
+            }, 1000)
+        }
+        stop() {
+            clearInterval(this.timer_con);
+        }
+    }
+</script>

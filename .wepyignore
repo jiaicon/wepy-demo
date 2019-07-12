@@ -1,4 +1,4 @@
 node_modules
 dist
 .DS_Store
-.wepycache
+*.wpy___jb_tmp___
